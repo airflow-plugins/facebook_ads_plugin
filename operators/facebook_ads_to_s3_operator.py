@@ -1,10 +1,11 @@
-from facebook_ads_plugin.hooks.facebook_ads_hook import FacebookAdsHook
-from airflow.hooks.S3_hook import S3Hook
-from airflow.models import BaseOperator
-
 import json
 import os
 from datetime import datetime
+
+from airflow.hooks.S3_hook import S3Hook
+from airflow.models import BaseOperator
+
+from facebook_ads_plugin.hooks.facebook_ads_hook import FacebookAdsHook
 
 
 class FacebookAdsInsightsToS3Operator(BaseOperator):
@@ -87,7 +88,13 @@ class FacebookAdsInsightsToS3Operator(BaseOperator):
         file_name = '/tmp/{key}.jsonl'.format(key=self.s3_key)
         with open(file_name, 'w') as insight_file:
             for account_id in self.account_ids:
-                insights = facebook_conn.get_insights_for_account_id(account_id, self.insight_fields, self.breakdowns, time_range, self.time_increment, self.level, self.limit)
+                insights = facebook_conn.get_insights_for_account_id(account_id, 
+                                                                     self.insight_fields, 
+                                                                     self.breakdowns, 
+                                                                     time_range, 
+                                                                     self.time_increment, 
+                                                                     self.level, 
+                                                                     self.limit)
 
                 if len(insights) > 0:
                     for insight in insights[:-1]:
