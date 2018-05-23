@@ -1,8 +1,8 @@
-from airflow.hooks.base_hook import BaseHook
-
 from urllib.parse import urlencode
 import requests
 import time
+
+from airflow.hooks.base_hook import BaseHook
 
 
 class FacebookAdsHook(BaseHook):
@@ -14,7 +14,14 @@ class FacebookAdsHook(BaseHook):
         self.api_version = self.connection.extra_dejson['apiVersion'] or '2.10'
         self.access_token = self.connection.extra_dejson['accessToken'] or self.connection.password
 
-    def get_insights_for_account_id(self, account_id, insight_fields, breakdowns, time_range, time_increment='all_days', level='ad', limit=100):
+    def get_insights_for_account_id(self, 
+                                    account_id, 
+                                    insight_fields, 
+                                    breakdowns, 
+                                    time_range, 
+                                    time_increment='all_days', 
+                                    level='ad', 
+                                    limit=100):
         payload = urlencode({
             'access_token': self.access_token,
             'breakdowns': ','.join(breakdowns),
